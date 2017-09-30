@@ -59,7 +59,7 @@ public class GDChartboost extends Godot.SingletonBase {
 		activity = p_activity;
 
 		registerClass ("GDChartboost", new String[] {
-		"init", "show_interstitial_ad"
+		"init", "show_interstitial_ad", "show_rewarded_video"
 		});
 	}
 
@@ -116,7 +116,7 @@ public class GDChartboost extends Godot.SingletonBase {
 		});
 	}
 
-	public void show_rewarded_ad() {
+	public void show_rewarded_video() {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
 				if (Chartboost.hasRewardedVideo(CBLocation.LOCATION_DEFAULT)) {

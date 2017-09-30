@@ -17,7 +17,7 @@
 build_admob = True
 build_adcolony = True
 build_chartboost = True
-build_vungle = False
+build_vungle = True
 
 import os
 
@@ -25,6 +25,8 @@ def can_build(plat):
 	return plat == "android"
 
 def configure(env):
+	cur_dir = os.path.dirname(os.path.abspath(__file__))
+
 	if env["platform"] == "android":
 		env.android_add_maven_repository('url "https://maven.google.com"')
 		env.android_add_maven_repository(\
@@ -55,11 +57,9 @@ def configure(env):
 
 		if (build_chartboost):
 			env.android_add_java_dir("chartboost");
-			cur_dir = os.path.dirname(os.path.abspath(__file__))
-			print(cur_dir)
-
-			env.android_add_dependency("compile files('"+cur_dir+"/libs/chartboost.jar')")
+			env.android_add_dependency("compile fileTree(dir: '"+cur_dir+"/libs', include: ['*.jar'])")
 		if (build_vungle):
 			env.android_add_java_dir("vungle");
+			env.android_add_dependency("compile fileTree(dir: '"+cur_dir+"/libs', include: ['*.jar'])")
 
 		#env.android_add_default_config("minSdkVersion 15")
