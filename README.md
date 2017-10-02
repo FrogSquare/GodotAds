@@ -17,6 +17,12 @@ build_vungle = True		# Include Vungle
 
 # Setting up
 
+**sdk and dependency** for (Chartboost and Vungle)
+Download the sdk to `${GODOT_ROOT}/modules/GodotAds/libs/`
+
+Chartboost: [Android SDk](http://www.chartboo.st/sdk/android)
+Vungle: [Android SDK](https://dashboard.vungle.com/dashboard/api/1/sdk/android?v=4)
+
 Initialize AdMob
 ```
 var AdMob = Globals.get_singleton("AdMob")
