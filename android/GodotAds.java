@@ -30,7 +30,7 @@ public class GodotAds extends Godot.SingletonBase {
 		});
 	}
 
-	public void init () {
-
+	public void init (int p_script_id) {
+		Utils.setScriptInstance(p_script_id);
 	}
 }

@@ -63,24 +63,30 @@ public class AdMob extends Godot.SingletonBase {
 		});
 	}
 
-	public void init (final Dictionary p_dict) {
+	public void init (final Dictionary p_dict, final int p_script_id) {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
-				AdMobConfig = new JSONObject(p_dict);
+				_config = new JSONObject(p_dict);
+				_init();
 
-				if (AdMobConfig.optBoolean("BannerAd", false)) {
-					createBanner();
-				}
-
-				if (AdMobConfig.optBoolean("InterstitialAd", false)) {
-					createInterstitial();
-				}
-
-				if (AdMobConfig.optBoolean("RewardedVideoAd", false)) {
-					createRewardedVideo();
-				}
+				Utils.setScriptInstance(p_script_id);
+				Utils.d("AdMob::Initialized");
 			}
 		});
+	}
+
+	private void _init() {
+		if (_config.optBoolean("BannerAd", false)) {
+			createBanner();
+		}
+
+		if (_config.optBoolean("InterstitialAd", false)) {
+			createInterstitial();
+		}
+
+		if (_config.optBoolean("RewardedVideoAd", false)) {
+			createRewardedVideo();
+		}
 	}
 
 	public void createBanner() {
@@ -91,7 +97,7 @@ public class AdMob extends Godot.SingletonBase {
 
 		if(mAdView != null) { layout.removeView(mAdView); }
 
-		if (AdMobConfig.optString("BannetGravity", "BOTTOM").equals("BOTTOM")) {
+		if (_config.optString("BannerGravity", "BOTTOM").equals("BOTTOM")) {
 			AdParams.gravity = Gravity.BOTTOM;
 		} else { AdParams.gravity = Gravity.TOP; }
 
@@ -106,7 +112,7 @@ public class AdMob extends Godot.SingletonBase {
 
 		AdRequest adRequest = adRequestB.build();
 
-		String ad_unit_id = AdMobConfig.optString("BannerAdId", "");
+		String ad_unit_id = _config.optString("BannerAdId", "");
 
 		if (ad_unit_id.length() <= 0) {
 			Utils.d("AdMob:Banner:UnitId:NotProvided");
@@ -122,13 +128,13 @@ public class AdMob extends Godot.SingletonBase {
 			@Override
 			public void onAdLoaded() {
 				Utils.d("AdMob:Banner:OnAdLoaded");
-				Utils.callScriptFunc("AdMob_Banner", "loaded");
+				Utils.callScriptFunc("AdMob", "AdMob_Banner", "loaded");
 			}
 
 			@Override
 			public void onAdFailedToLoad(int errorCode) {
 				Utils.w("AdMob:Banner:onAdFailedToLoad:" + errorCode);
-				Utils.callScriptFunc("AdMob_Banner", "load_failed");
+				Utils.callScriptFunc("AdMob", "AdMob_Banner", "load_failed");
 			}
 		});
 
@@ -139,7 +145,7 @@ public class AdMob extends Godot.SingletonBase {
 	}
 
 	public void createInterstitial() {
-		String ad_unit_id = AdMobConfig.optString("InterstitialAdId", "");
+		String ad_unit_id = _config.optString("InterstitialAdId", "");
 
 		if (ad_unit_id.length() <= 0) {
 			Utils.d("AdMob:Interstitial:UnitId:NotProvided");
@@ -152,13 +158,13 @@ public class AdMob extends Godot.SingletonBase {
 			@Override
 			public void onAdLoaded() {
 				Utils.d("AdMob:Interstitial:OnAdLoaded");
-				Utils.callScriptFunc("AdMob_Interstitial", "loaded");
+				Utils.callScriptFunc("AdMob", "AdMob_Interstitial", "loaded");
 			}
 
 			@Override
 			public void onAdFailedToLoad(int errorCode) {
 				Utils.w("AdMob:Interstitial:onAdFailedToLoad:" + errorCode);
-				Utils.callScriptFunc("AdMob_Interstitial", "load_failed");
+				Utils.callScriptFunc("AdMob", "AdMob_Interstitial", "load_failed");
 			}
 
 			@Override
@@ -208,13 +214,13 @@ public class AdMob extends Godot.SingletonBase {
 					Utils.d("AdMob:Reward:Error:" + e.toString());
 				}
 
-				Utils.callScriptFunc("AdMobReward", ret.toString());
+				Utils.callScriptFunc("AdMob", "AdMobReward", ret.toString());
 			}
 
 			@Override
 			public void onRewardedVideoAdFailedToLoad(int errorCode) {
 				Utils.d("AdMob:VideoLoad:Failed");
-				Utils.callScriptFunc("AdMob_Video", "load_failed");
+				Utils.callScriptFunc("AdMob", "AdMob_Video", "load_failed");
 			}
 
 			@Override
@@ -242,7 +248,7 @@ public class AdMob extends Godot.SingletonBase {
 	}
 
 	private void requestNewRewardedVideo() {
-		if (AdMobConfig == null) { return; }
+		if (_config == null) { return; }
 
 		AdRequest.Builder adRB = new AdRequest.Builder();
 
@@ -251,7 +257,7 @@ public class AdMob extends Godot.SingletonBase {
 			adRB.addTestDevice(Utils.getDeviceId(activity));
 		}
 
-		String ad_unit_id = AdMobConfig.optString("RewardedVideoAdId", "");
+		String ad_unit_id = _config.optString("RewardedVideoAdId", "");
 
 		if (ad_unit_id.length() <= 0) {
 			Utils.d("AdMob:RewardedVideo:UnitId:NotProvided");
@@ -331,6 +337,8 @@ public class AdMob extends Godot.SingletonBase {
 	private RewardedVideoAd mrv = null;
 	private InterstitialAd mInterstitialAd = null;
 
-	private JSONObject AdMobConfig = null;
+	private JSONObject _config = null;
+
+	private int _script_id = -1;
 }
 

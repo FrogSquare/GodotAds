@@ -63,11 +63,14 @@ public class GDChartboost extends Godot.SingletonBase {
 		});
 	}
 
-	public void init (final Dictionary p_dict) {
+	public void init (final Dictionary p_dict, final int p_script_id) {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
 				_config = new JSONObject(p_dict);
 				_init();
+
+				Utils.setScriptInstance(p_script_id);
+				Utils.d("Chartboost::Initialized");
 			}
 		});
 	}
@@ -80,7 +83,6 @@ public class GDChartboost extends Godot.SingletonBase {
 		Chartboost.setDelegate(delegate);
 
 		Chartboost.setLoggingLevel(Level.NONE);
-
 		Chartboost.onCreate(activity);
 
 		preloadAds();
@@ -142,32 +144,33 @@ public class GDChartboost extends Godot.SingletonBase {
 
 		@Override
 		public void didCacheInterstitial(String location) {
-
+			Utils.callScriptFunc("Chartboost", "Cached", location);
 		}
 
 		@Override
 		public void didFailToLoadInterstitial(String location, CBImpressionError error) {
-
+			//Utils.d("Chartboost::AdLoad::Failed:: " + error.toString());
+			Utils.callScriptFunc("Chartboost", "CachedFailed", location);
 		}
 
 		@Override
 		public void didDismissInterstitial(String location) {
-
+			Utils.callScriptFunc("Chartboost", "AdDismiss", location);
 		}
 
 		@Override
 		public void didCloseInterstitial(String location) {
-
+			Utils.callScriptFunc("Chartboost", "AdCloned", location);
 		}
 
 		@Override
 		public void didClickInterstitial(String location) {
-
+			Utils.callScriptFunc("Chartboost", "AdClicked", location);
 		}
 
 		@Override
 		public void didDisplayInterstitial(String location) {
-
+			Utils.callScriptFunc("Chartboost", "AdDisplayed", location);
 		}
 
 		@Override
@@ -182,37 +185,37 @@ public class GDChartboost extends Godot.SingletonBase {
 
 		@Override
 		public void didFailToLoadMoreApps(String location, CBImpressionError error) {
-
+			//Utils.callScriptFunc("Chartboost", "MoreAdsFailed", location);
 		}
 
 		@Override
 		public void didCacheMoreApps(String location) {
-
+			//Utils.callScriptFunc("Chartboost", "", location);
 		}
 
 		@Override
 		public void didDismissMoreApps(String location) {
-
+			//Utils.callScriptFunc("Chartboost", "", location);
 		}
 
 		@Override
 		public void didCloseMoreApps(String location) {
-
+			//Utils.callScriptFunc("Chartboost", "", location);
 		}
 
 		@Override
 		public void didClickMoreApps(String location) {
-
+			//Utils.callScriptFunc("Chartboost", "", location);
 		}
 
 		@Override
 		public void didDisplayMoreApps(String location) {
-
+			//Utils.callScriptFunc("Chartboost", "", location);
 		}
 
 		@Override
 		public void didFailToRecordClick(String uri, CBClickError error) {
-
+			//Utils.callScriptFunc("Chartboost", "", location);
 		}
 
 		@Override
@@ -222,42 +225,42 @@ public class GDChartboost extends Godot.SingletonBase {
 
 		@Override
 		public void didCacheRewardedVideo(String location) {
-
+			Utils.callScriptFunc("Chartboost", "RewardedAdCached", location);
 		}
 
 		@Override
 		public void didFailToLoadRewardedVideo(String location, CBImpressionError error) {
-
+			Utils.callScriptFunc("Chartboost", "CacheFailedRewardedAd", location);
 		}
 
 		@Override
 		public void didDismissRewardedVideo(String location) {
-
+			Utils.callScriptFunc("Chartboost", "RewardAdDismissed", location);
 		}
 
 		@Override
 		public void didCloseRewardedVideo(String location) {
-
+			Utils.callScriptFunc("Chartboost", "CloseRewardAd", location);
 		}
 
 		@Override
 		public void didClickRewardedVideo(String location) {
-
+			Utils.callScriptFunc("Chartboost", "RewardAdClick", location);
 		}
 
 		@Override
 		public void didCompleteRewardedVideo(String location, int reward) {
-
+			Utils.callScriptFunc("Chartboost", "RewardAdComplete", location);
 		}
 
 		@Override
 		public void didDisplayRewardedVideo(String location) {
-
+			Utils.callScriptFunc("Chartboost", "RewardAdDisplayed", location);
 		}
 
 		@Override
 		public void willDisplayVideo(String location) {
-
+			Utils.callScriptFunc("Chartboost", "WillShowVideo", location);
 		}
 	};
 

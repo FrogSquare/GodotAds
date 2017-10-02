@@ -1,0 +1,11 @@
+
+<!-- Vungle -->
+<activity android:name="com.vungle.publisher.VideoFullScreenAdActivity"
+android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
+android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+
+<activity android:name="com.vungle.publisher.MraidFullScreenAdActivity"
+android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
+android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
+<!-- Vungle -->
+

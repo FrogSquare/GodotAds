@@ -61,11 +61,14 @@ public class GDAdColony extends Godot.SingletonBase {
 		});
 	}
 
-	public void init (final Dictionary p_dict) {
+	public void init (final Dictionary p_dict, final int p_script_id) {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
 				_config = new JSONObject(p_dict);
 				_init();
+
+				Utils.setScriptInstance(p_script_id);
+				Utils.d("AdColony::Initialized");
 			}
 		});
 	}
@@ -105,24 +108,25 @@ public class GDAdColony extends Godot.SingletonBase {
 
 	private AdColonyInterstitialListener listener = new AdColonyInterstitialListener() {
 		@Override
-		public void onRequestFilled(AdColonyInterstitial adI) {
-			Utils.d("AdColony::RequestFilled::" + adI.getZoneID());
-			_ad_caller.put(adI.getZoneID(), adI);
+		public void onRequestFilled(AdColonyInterstitial p_ad) {
+			Utils.d("AdColony::RequestFilled::" + p_ad.getZoneID());
+			_ad_caller.put(p_ad.getZoneID(), p_ad);
+			Utils.callScriptFunc("AdColony", "AdFilled", true);
 		}
 	
 		@Override
 		public void onRequestNotFilled(AdColonyZone zone) {
-
+			Utils.callScriptFunc("AdColony", "AdFillFailed", true);
 		}
 
 		@Override
-		public void onOpened(AdColonyInterstitial ad) {
-
+		public void onOpened(AdColonyInterstitial p_ad) {
+			Utils.callScriptFunc("AdColony", "AdOpened", p_ad.getZoneID());
 		}
 
 		@Override
-		public void onExpiring(AdColonyInterstitial ad) {
-
+		public void onExpiring(AdColonyInterstitial p_ad) {
+			Utils.callScriptFunc("AdColony", "AdExpiring", p_ad.getZoneID());
 		}
 	};
 
@@ -130,6 +134,7 @@ public class GDAdColony extends Godot.SingletonBase {
 		@Override
 		public void onReward(AdColonyReward reward) {
 			Utils.d("Give Reward");
+			Utils.callScriptFunc("AdColony", "Reward", true);
 			/** Query reward object for info here */
 		}
 	};

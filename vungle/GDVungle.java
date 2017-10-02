@@ -29,6 +29,9 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 
 import com.vungle.publisher.VunglePub;
+import com.vungle.publisher.EventListener;
+import com.vungle.publisher.AdConfig;
+import com.vungle.publisher.Orientation;
 
 import com.godot.game.BuildConfig;
 import com.godot.game.R;
@@ -55,11 +58,14 @@ public class GDVungle extends Godot.SingletonBase {
 		});
 	}
 
-	public void init (final Dictionary p_dict) {
+	public void init (final Dictionary p_dict, final int p_script_id) {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
 				_config = new JSONObject(p_dict);
 				_init();
+
+				Utils.setScriptInstance(p_script_id);
+				Utils.d("Vungle::Initialized");
 			}
 		});
 	}
@@ -68,8 +74,14 @@ public class GDVungle extends Godot.SingletonBase {
 		final String app_id = _config.optString("app_id");
 		vunglePub.init(activity, app_id);
 
-		Utils.d("Vungle::Initialized");
+		final AdConfig globalAdConfig = vunglePub.getGlobalAdConfig();
+		globalAdConfig.setSoundEnabled(true);
+		globalAdConfig.setOrientation(Orientation.autoRotate);
+
+		vunglePub.setEventListeners(listener);
 	}
+
+	//TODO: expose AdPlay configuration to script
 
 	public void show() {
 		activity.runOnUiThread(new Runnable() {
@@ -77,10 +89,63 @@ public class GDVungle extends Godot.SingletonBase {
 				if (vunglePub.isAdPlayable()) {
 					Utils.d("Vungle::Show::Ad");
 					vunglePub.playAd();
+
+					/**
+					// create a new AdConfig object
+					final AdConfig overrideConfig = new AdConfig();
+
+					// set any configuration options you like.
+					// For a full description of available options, see the
+					// 'Configuration Options' section.
+
+					overrideConfig.setIncentivized(true);
+					overrideConfig.setSoundEnabled(false);
+
+					// the overrideConfig object will only affect this ad play.
+					vunglePub.playAd(overrideConfig);
+					**/
 				}
 			}
 		});
 	}
+
+	private EventListener listener = new EventListener() {
+		@Override
+		public void onAdStart() {
+			Utils.d("Vungle::Ad::Start");
+		}
+
+		@Override
+		public void onAdEnd(boolean wasSuccessfulView, boolean wasCallToActionClicked) {
+			if (wasSuccessfulView) {
+				Utils.d("Vungle::ShouldReward");
+				Utils.callScriptFunc("Vungle", "ShowReward", true);
+			}
+
+			if (wasCallToActionClicked) {
+				Utils.d("Vungle::CallToAction::Clicked");
+				Utils.callScriptFunc("Vungle", "CallToAction", true);
+			}
+
+			Utils.d("Vungle::Ad::End");
+		}
+
+		@Override
+		public void onAdPlayableChanged(boolean isAdPlayable) {
+			Utils.d("Vungle::Ad::Playable::Changed");
+
+			if (isAdPlayable) {
+				Utils.d("Vungle::Ad::Playable");
+				Utils.callScriptFunc("Vungle", "AdAvailable", true);
+			} else { Utils.d("Vungle::Ad::NotPlayable"); }
+		}
+
+		@Override
+		public void onAdUnavailable(String reason) {
+			Utils.d("Vungle::AdUnavailable::" + reason);
+			Utils.callScriptFunc("Vungle", "AdAvailable", false);
+		}
+	};
 
 	protected void onMainPause () {
 		vunglePub.onPause();
@@ -88,6 +153,10 @@ public class GDVungle extends Godot.SingletonBase {
 
 	protected void onMainResume () {
 		vunglePub.onResume();
+	}
+
+	protected void onMainDestroy() {
+		vunglePub.clearEventListeners();
 	}
 
 	private static Activity activity;
