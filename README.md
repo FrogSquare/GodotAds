@@ -1,5 +1,5 @@
 # GodotAds
-Godot all in one ads module for Android. (Customisable)
+Godot all in one ads module for Android. (Customizable)
 
 # Cloning
 ```
@@ -13,6 +13,7 @@ build_admob = True		# Include AdMob
 build_adcolony = True		# Include AdColony
 build_chartboost = True		# Include Chartboost
 build_vungle = True		# Include Vungle
+build_mopub = True		# Include Mopub
 ```
 
 # Setting up
@@ -31,7 +32,7 @@ var _dict = Dictionary()
 _dict["BannerAd"] = false
 _dict["InterstitialAd"] = false
 _dict["RewardedVideoAd"] = false
-_dict["BannerGravity"] = "BOTTOM" # or Top
+_dict["BannerGravity"] = "BOTTOM" # or TOP
 _dict["BannerAdId"] = "your banner ad id"
 _dict["InterstitialAdId"] = "your interstitial ad id"
 _dict["RewardedVideoAdId"] = "rewarded video ad id"
@@ -66,10 +67,24 @@ Initialize Vungle
 ```
 var Vungle = Globals.get_singleton("GDVungle")
 
-var _dict = Dictionary();
+var _dict = Dictionary()
 _dict["app_id"] = "your vungle app"
 
 Vungle.init(_dict, get_instance_ID())
+```
+
+Initialize MoPub
+```
+var Mopub = Globals.get_singleton("GDMopub")
+
+var _dict = Dictionary()
+_dict["BannerAd"] = true
+_dict["InterstitialAd"] = true
+_dict["BannerGravity"] = "BOTTOM" # or TOP
+_dict["BannerAdId"] = "your banner unit id"
+_dict["InterstitialAdId"] = "your interstitial unit id"
+
+Mopub.init(_dict, get_instance_ID())
 ```
 
 # Callbacks
@@ -83,8 +98,8 @@ func _receive_message (from, key, value) {
 # API
 **AdMob**
 ```
-AdMob.show_banner_ad(true) # show ad
-AdMob.show_banner_ad(false) # hide ad
+AdMob.show_banner_ad(true) # show banner ad
+AdMob.show_banner_ad(false) # hide banner ad
 
 AdMob.show_interstitial_ad() # Show Interstitial Ad
 
@@ -105,6 +120,14 @@ Chartboost.show_rewarded_video()
 **Vungle**
 ```
 Vungle.show()
+```
+
+**MoPub**
+```
+AdMob.show_banner_ad(true) # show banner ad
+AdMob.show_banner_ad(false) # hide banner ad
+
+AdMob.show_interstitial_ad() # Show Interstitial Ad
 ```
 
 # Log adb

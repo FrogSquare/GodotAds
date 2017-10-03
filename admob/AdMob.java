@@ -311,21 +311,17 @@ public class AdMob extends Godot.SingletonBase {
 		});
 	}
 
-	public void onStart() {
-
-	}
-
-	public void onPause() {
+	protected void onMainPause () {
 		if (mAdView != null) { mAdView.pause(); }
 		if (mrv != null) { mrv.pause(activity); }
 	}
 
-	public void onResume() {
+	protected void onMainResume () {
 		if (mAdView != null) { mAdView.resume(); }
 		if (mrv != null) { mrv.resume(activity); }
 	}
 
-	public void onStop() {
+	protected void onMainDestroy () {
 		if (mAdView != null) { mAdView.destroy(); }
 		if (mrv != null) { mrv.destroy(activity); }
 	}
