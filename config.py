@@ -14,15 +14,18 @@
 # limitations under the License.
 """
 
-build_admob = True		# Include AdMob
-build_adcolony = True		# Include AdColony
-build_chartboost = True		# Include Chartboost
-build_vungle = True		# Include Vungle
-build_mopub = True		# Include Mopub
-build_awesome_ads = False
-build_appodeal = False
-build_inmobi = False
-build_unity_ads = False
+build = {
+"admob"		: True,
+"adcolony"	: True,
+"chartboost"	: True,
+"vungle"	: True,
+"mopub"		: True,
+"unity_ads"	: True,
+"awesome_ads"	: False,
+"appodeal"	: False,
+"inmobi"	: False,
+}
+
 
 import os
 
@@ -52,9 +55,9 @@ def configure(env):
 
 		env.android_add_dependency("compile 'com.google.android.gms:play-services-ads:11.2.0'")
 
-		if (build_admob):
+		if (build["admob"]):
 			env.android_add_java_dir("admob");
-		if (build_adcolony):
+		if (build["adcolony"]):
 			env.android_add_java_dir("adcolony");
 			env.android_add_to_manifest("adcolony/AndroidManifestChunk.xml")
 
@@ -62,18 +65,18 @@ def configure(env):
 			env.android_add_dependency("compile 'com.android.support:support-annotations:25.0.1'")
 			env.android_add_dependency("compile 'com.adcolony:sdk:3.2.1'")
 
-		if (build_chartboost):
+		if (build["chartboost"]):
 			env.android_add_java_dir("chartboost");
 			env.android_add_to_manifest("chartboost/AndroidManifestChunk.xml")
 
 			env.android_add_dependency("compile fileTree(dir: '"+cur_dir+"/libs', include: ['*.jar'])")
-		if (build_vungle):
+		if (build["vungle"]):
 			env.android_add_java_dir("vungle");
 			env.android_add_to_manifest("vungle/AndroidManifestChunk.xml")
 
 			env.android_add_dependency("compile 'com.google.android.gms:play-services-location:11.2.0'")
 			env.android_add_dependency("compile fileTree(dir: '"+cur_dir+"/libs', include: ['*.jar'])")
-		if (build_mopub):
+		if (build["mopub"]):
 			env.android_add_default_config("minSdkVersion 16")
 
 			env.android_add_java_dir("mopub");
@@ -82,9 +85,12 @@ def configure(env):
 
 			env.android_add_maven_repository('url "https://s3.amazonaws.com/moat-sdk-builds"')
 			env.android_add_dependency("compile('com.mopub:mopub-sdk:4.16.0@aar') { transitive = true }")
-		if (build_awesome_ads):
-			pass
-		if (build_appodeal): pass
-		if (build_inmobi): pass
-		if (build_unity_ads): pass
+		if (build["unity_ads"]):
+			env.android_add_java_dir("unity_ads");
+			env.android_add_flat_dir(cur_dir + "/libs")
+			env.android_add_flat_dir(cur_dir + "/res")
+			env.android_add_dependency("compile(name:'unity-ads', ext:'aar')")
+		if (build["awesome_ads"]): pass
+		if (build["appodeal"]): pass
+		if (build["inmobi"]): pass
 

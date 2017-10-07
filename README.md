@@ -87,6 +87,16 @@ _dict["InterstitialAdId"] = "your interstitial unit id"
 Mopub.init(_dict, get_instance_ID())
 ```
 
+Initialize UnityAds
+```
+var Unityads = Globals.get_singleton("GDUnityAds")
+
+var _dict = Dictionary()
+_dict["GameId"] = "Your game ID"
+
+Unityads.init(_dict, get_instance_ID())
+```
+
 # Callbacks
 adding the callback funtion so we can recive event log/states from the module
 ```
@@ -128,6 +138,11 @@ AdMob.show_banner_ad(true) # show banner ad
 AdMob.show_banner_ad(false) # hide banner ad
 
 AdMob.show_interstitial_ad() # Show Interstitial Ad
+```
+
+**Unity Ads**
+```
+Unityads.show("Location id")
 ```
 
 # Log adb

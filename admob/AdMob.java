@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.RelativeLayout;
 import android.widget.FrameLayout;
 
 import com.google.android.gms.ads.AdListener;
@@ -90,7 +91,7 @@ public class AdMob extends Godot.SingletonBase {
 	}
 
 	public void createBanner() {
-		FrameLayout layout = ((Godot)activity).layout; // Getting Godots framelayout
+		RelativeLayout layout = ((Godot)activity).adLayout; // Getting Godots framelayout
 		FrameLayout.LayoutParams AdParams = new FrameLayout.LayoutParams(
 						 FrameLayout.LayoutParams.MATCH_PARENT,
 						 FrameLayout.LayoutParams.WRAP_CONTENT);

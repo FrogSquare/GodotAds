@@ -27,6 +27,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public class GDMopub extends Godot.SingletonBase {
 	}
 
 	private void createBanner() {
-		FrameLayout layout = ((Godot)activity).layout; // Getting Godots framelayout
+		RelativeLayout layout = ((Godot)activity).adLayout; // Getting Godots framelayout
 		FrameLayout.LayoutParams AdParams = new FrameLayout.LayoutParams(
 						 FrameLayout.LayoutParams.MATCH_PARENT,
 						 FrameLayout.LayoutParams.WRAP_CONTENT);
