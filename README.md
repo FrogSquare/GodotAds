@@ -1,6 +1,11 @@
 # GodotAds
 Godot all in one ads module for Android. (Customizable)
 
+[![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](https://github.com/FrogSquare/GodotFireBase)
+[![GodotEngine](https://img.shields.io/badge/Godot_Engine-2.X%20/%203.X-blue.svg)](https://github.com/godotengine/godot)
+[![LICENCE](https://img.shields.io/badge/License-Apache_V2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![PATREON](https://img.shields.io/badge/Patreon-donate-yellow.svg)](https://www.patreon.com/bePatron?u=5130479)
+
 # Cloning
 ```
 cd ${GODOT_ROOT}/modules/
@@ -9,11 +14,14 @@ git clone https://github.com/FrogSquare/GodotAds GodotAds
  and you must configure your module by editing `${GODOT_ROOT}/modules/GodotAds/config.py`
 
 ```
-build_admob = True		# Include AdMob
-build_adcolony = True		# Include AdColony
-build_chartboost = True		# Include Chartboost
-build_vungle = True		# Include Vungle
-build_mopub = True		# Include Mopub
+build = {
+"admob"         : True,
+"adcolony"      : True,
+"chartboost"    : True,
+"vungle"        : True,
+"mopub"         : True,
+"unity_ads"     : True,
+}
 ```
 
 # Setting up
@@ -23,6 +31,7 @@ Download the sdk to `${GODOT_ROOT}/modules/GodotAds/libs/`
 
 Chartboost: [Android SDk](http://www.chartboo.st/sdk/android)
 Vungle: [Android SDK](https://dashboard.vungle.com/dashboard/api/1/sdk/android?v=4)
+UnityAds: [Android SDK](https://github.com/Unity-Technologies/unity-ads-android/releases/download/2.1.1/unity-ads.aar)
 
 Initialize AdMob
 ```

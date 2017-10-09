@@ -44,7 +44,7 @@ def configure(env):
 		env.android_add_to_manifest("android/AndroidManifestChunk.xml")
 		env.android_add_to_permissions("android/AndroidPermissionsChunk.xml");
 
-		env.android_add_gradle_classpath("com.google.gms:google-services:3.1.1")
+		#env.android_add_gradle_classpath("com.google.gms:google-services:3.1.1")
 		#env.android_add_gradle_plugin("com.google.gms.google-services")
 
 		if "FireBase" in env.module_list: pass
@@ -53,7 +53,7 @@ def configure(env):
 		env.android_add_java_dir("android");
 		env.android_add_res_dir("res");
 
-		env.android_add_dependency("compile 'com.google.android.gms:play-services-ads:11.2.0'")
+		env.android_add_dependency("compile 'com.google.android.gms:play-services-ads:11.4.2'")
 
 		if (build["admob"]):
 			env.android_add_java_dir("admob");
@@ -74,7 +74,7 @@ def configure(env):
 			env.android_add_java_dir("vungle");
 			env.android_add_to_manifest("vungle/AndroidManifestChunk.xml")
 
-			env.android_add_dependency("compile 'com.google.android.gms:play-services-location:11.2.0'")
+			env.android_add_dependency("compile 'com.google.android.gms:play-services-location:11.4.2'")
 			env.android_add_dependency("compile fileTree(dir: '"+cur_dir+"/libs', include: ['*.jar'])")
 		if (build["mopub"]):
 			env.android_add_default_config("minSdkVersion 16")
