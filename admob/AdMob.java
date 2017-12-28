@@ -60,7 +60,7 @@ public class AdMob extends Godot.SingletonBase {
 		activity = p_activity;
 
 		registerClass ("AdMob", new String[] {
-		"init", "show_banner_ad", "show_interstitial_ad", "show_rewarded_video"
+		"init", "show_banner_ad", "show_interstitial_ad", "show_rewarded_video", "get_banner_size"
 		});
 	}
 
@@ -77,6 +77,10 @@ public class AdMob extends Godot.SingletonBase {
 	}
 
 	private void _init() {
+        mAdSize = new Dictionary();
+        mAdSize.put("width", 0);
+        mAdSize.put("height", 0);
+
 		if (_config.optBoolean("BannerAd", false)) {
 			createBanner();
 		}
@@ -129,6 +133,11 @@ public class AdMob extends Godot.SingletonBase {
 			@Override
 			public void onAdLoaded() {
 				Utils.d("AdMob:Banner:OnAdLoaded");
+                AdSize adSize = mAdView.getAdSize();
+
+                mAdSize.put("width", adSize.getWidthInPixels(activity));
+                mAdSize.put("height", adSize.getHeightInPixels(activity));
+
 				Utils.callScriptFunc("AdMob", "AdMob_Banner", "loaded");
 			}
 
@@ -312,6 +321,14 @@ public class AdMob extends Godot.SingletonBase {
 		});
 	}
 
+    public Dictionary get_banned_size() {
+        if ((int)mAdSize.get("width") == 0 || (int)mAdSize.get("height") == 0) {
+            Utils.d("AdView::Not::Loaded::Yet");
+        }
+        
+        return mAdSize;
+    }
+
 	protected void onMainPause () {
 		if (mAdView != null) { mAdView.pause(); }
 		if (mrv != null) { mrv.pause(activity); }
@@ -335,6 +352,7 @@ public class AdMob extends Godot.SingletonBase {
 	private InterstitialAd mInterstitialAd = null;
 
 	private JSONObject _config = null;
+    private Dictionary mAdSize = null;
 
 	private int _script_id = -1;
 }

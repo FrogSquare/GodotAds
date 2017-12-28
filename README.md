@@ -4,7 +4,7 @@ Godot all in one ads module for Android. (Customizable)
 [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](https://github.com/FrogSquare/GodotFireBase)
 [![GodotEngine](https://img.shields.io/badge/Godot_Engine-2.X%20/%203.X-blue.svg)](https://github.com/godotengine/godot)
 [![LICENCE](https://img.shields.io/badge/License-Apache_V2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![PATREON](https://img.shields.io/badge/Patreon-donate-yellow.svg)](https://www.patreon.com/bePatron?u=5130479)
+[![PATREON](https://img.shields.io/badge/Patreon-support-yellow.svg)](https://www.patreon.com/bePatron?u=5130479)
 
 # Cloning
 ```

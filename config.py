@@ -21,7 +21,7 @@ build = {
 "vungle"	: True,
 "mopub"		: True,
 "unity_ads"	: True,
-"awesome_ads"	: False,
+"awesome_ads"	: True,
 "appodeal"	: False,
 "inmobi"	: False,
 }
@@ -31,7 +31,6 @@ import os
 
 def can_build(plat):
 	return (plat == "android")
-	#return False
 
 def configure(env):
 	cur_dir = os.path.dirname(os.path.abspath(__file__))
@@ -53,7 +52,7 @@ def configure(env):
 		env.android_add_java_dir("android");
 		env.android_add_res_dir("res");
 
-		env.android_add_dependency("compile 'com.google.android.gms:play-services-ads:11.4.2'")
+		env.android_add_dependency("compile 'com.google.android.gms:play-services-ads:11.6.0'")
 
 		if (build["admob"]):
 			env.android_add_java_dir("admob");
@@ -74,7 +73,7 @@ def configure(env):
 			env.android_add_java_dir("vungle");
 			env.android_add_to_manifest("vungle/AndroidManifestChunk.xml")
 
-			env.android_add_dependency("compile 'com.google.android.gms:play-services-location:11.4.2'")
+			env.android_add_dependency("compile 'com.google.android.gms:play-services-location:11.6.0'")
 			env.android_add_dependency("compile fileTree(dir: '"+cur_dir+"/libs', include: ['*.jar'])")
 		if (build["mopub"]):
 			env.android_add_default_config("minSdkVersion 16")
