@@ -29,9 +29,9 @@ build = {
 **sdk and dependency** for (Chartboost and Vungle)
 Download the sdk to `${GODOT_ROOT}/modules/GodotAds/libs/`
 
-Chartboost: [Android SDk](http://www.chartboo.st/sdk/android)
-Vungle: [Android SDK](https://dashboard.vungle.com/dashboard/api/1/sdk/android?v=4)
-UnityAds: [Android SDK](https://github.com/Unity-Technologies/unity-ads-android/releases/download/2.1.1/unity-ads.aar)
+Chartboost: [Chartboost SDk](http://www.chartboo.st/sdk/android)
+Vungle: [Vungle SDK](https://dashboard.vungle.com/dashboard/api/1/sdk/android?v=4)
+UnityAds: [Unity-ads SDK](https://github.com/Unity-Technologies/unity-ads-android/releases/download/2.1.1/unity-ads.aar)
 
 Initialize AdMob
 ```
