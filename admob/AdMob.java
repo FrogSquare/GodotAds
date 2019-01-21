@@ -95,12 +95,15 @@ public class AdMob extends Godot.SingletonBase {
 	}
 
 	public void createBanner() {
-		RelativeLayout layout = ((Godot)activity).adLayout; // Getting Godots framelayout
+        RelativeLayout adLayout = new RelativeLayout(activity);
+        adLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+        ((Godot)activity).layout.addView(adLayout);
+
 		FrameLayout.LayoutParams AdParams = new FrameLayout.LayoutParams(
 						 FrameLayout.LayoutParams.MATCH_PARENT,
 						 FrameLayout.LayoutParams.WRAP_CONTENT);
 
-		if(mAdView != null) { layout.removeView(mAdView); }
+		if(mAdView != null) { adLayout.removeView(mAdView); }
 
 		if (_config.optString("BannerGravity", "BOTTOM").equals("BOTTOM")) {
 			AdParams.gravity = Gravity.BOTTOM;
@@ -151,7 +154,7 @@ public class AdMob extends Godot.SingletonBase {
 		mAdView.setVisibility(View.INVISIBLE);
 		mAdView.loadAd(adRequest);
 
-		layout.addView(mAdView, AdParams);
+		adLayout.addView(mAdView, AdParams);
 	}
 
 	public void createInterstitial() {
@@ -251,6 +254,11 @@ public class AdMob extends Godot.SingletonBase {
 			@Override
 			public void onRewardedVideoStarted() {
 				Utils.d("Reward:VideoAd:Started");
+			}
+
+			@Override
+			public void onRewardedVideoCompleted() {
+				Utils.d("Reward:VideoAd:Completed");
 			}
 		});
 

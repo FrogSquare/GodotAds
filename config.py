@@ -17,18 +17,18 @@
 build = {
 "admob"         : True,
 "adcolony"      : True,
-"chartboost"    : True,
-"vungle"        : True,
-"mopub"         : True,
-"unity_ads"     : True,
-"awesome_ads"   : True,
+"chartboost"    : False,
+"vungle"        : False,
+"mopub"         : False,
+"unity_ads"     : False,
+"awesome_ads"   : False,
 "appodeal"      : False,
 "inmobi"        : False,
 }
 
 import os
 
-def can_build(plat):
+def can_build(env, plat):
     return (plat == "android")
     #return False
 
@@ -54,7 +54,9 @@ def configure(env):
         env.android_add_java_dir("android");
         env.android_add_res_dir("res");
 
-        env.android_add_dependency("compile 'com.google.android.gms:play-services-ads:15.0.1'")
+        env.android_add_dependency("compile ('com.google.android.gms:play-services-ads:15.0.1') {\
+                exclude group: 'com.android.support'\
+                exclude module: 'support-v4'}")
 
         if (build["admob"]):
             env.android_add_java_dir("admob");
@@ -64,7 +66,7 @@ def configure(env):
 
             env.android_add_maven_repository('url "https://adcolony.bintray.com/AdColony"')
             env.android_add_dependency("compile 'com.android.support:support-annotations:25.0.1'")
-            env.android_add_dependency("compile 'com.adcolony:sdk:3.2.1'")
+            env.android_add_dependency("compile 'com.adcolony:sdk:3.3.7'")
 
         if (build["chartboost"]):
             env.android_add_java_dir("chartboost");
