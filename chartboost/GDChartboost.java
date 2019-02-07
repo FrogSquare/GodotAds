@@ -144,13 +144,13 @@ public class GDChartboost extends Godot.SingletonBase {
 
 		@Override
 		public void didCacheInterstitial(String location) {
-			Utils.callScriptFunc("Chartboost", "Cached", location);
+			Utils.callScriptFunc("Chartboost", "adLoaded", location);
 		}
 
 		@Override
 		public void didFailToLoadInterstitial(String location, CBImpressionError error) {
 			//Utils.d("Chartboost::AdLoad::Failed:: " + error.toString());
-			Utils.callScriptFunc("Chartboost", "CachedFailed", location);
+			Utils.callScriptFunc("Chartboost", "adLoadFailed", location);
 		}
 
 		@Override
@@ -225,17 +225,17 @@ public class GDChartboost extends Godot.SingletonBase {
 
 		@Override
 		public void didCacheRewardedVideo(String location) {
-			Utils.callScriptFunc("Chartboost", "RewardedAdCached", location);
+			Utils.callScriptFunc("Chartboost", "rewardedAdLoaded", location);
 		}
 
 		@Override
 		public void didFailToLoadRewardedVideo(String location, CBImpressionError error) {
-			Utils.callScriptFunc("Chartboost", "CacheFailedRewardedAd", location);
+			Utils.callScriptFunc("Chartboost", "rewardedAdLoadFailed", location);
 		}
 
 		@Override
 		public void didDismissRewardedVideo(String location) {
-			Utils.callScriptFunc("Chartboost", "RewardAdDismissed", location);
+			Utils.callScriptFunc("Chartboost", "rewardAdDismissed", location);
 		}
 
 		@Override
@@ -250,7 +250,7 @@ public class GDChartboost extends Godot.SingletonBase {
 
 		@Override
 		public void didCompleteRewardedVideo(String location, int reward) {
-			Utils.callScriptFunc("Chartboost", "RewardAdComplete", location);
+			Utils.callScriptFunc("Chartboost", "rewardAdComplete", location);
 		}
 
 		@Override

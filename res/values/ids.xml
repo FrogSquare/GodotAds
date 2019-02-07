@@ -6,5 +6,8 @@
 	<string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
 	<string name="rewarded_video_ad_unit_id">ca-app-pub-3940256099942544/5224354917</string>
 	<string name="twitter_consumer_key">Mv71bxjlRumBlPI3HoRdle4I7</string>
-	<string name="twitter_consumer_secret">7yShM5dovdoBfLSnTfiIlZmZj6s6efBxQqapWcoZEOzDMHaKYx</string>
+    <string name="twitter_consumer_secret">7yShM5dovdoBfLSnTfiIlZmZj6s6efBxQqapWcoZEOzDMHaKYx</string>
+    
+	<string name="mopub_banner_test_id">b195f8dd8ded45fe847ad89ed1d016da</string>
+	<string name="mopub_interstitial_test_id">24534e1901884e398f1253216226017e</string>
 </resources>

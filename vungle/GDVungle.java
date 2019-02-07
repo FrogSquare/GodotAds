@@ -28,10 +28,14 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 
-import com.vungle.publisher.VunglePub;
-import com.vungle.publisher.EventListener;
-import com.vungle.publisher.AdConfig;
-import com.vungle.publisher.Orientation;
+import com.vungle.warren.Vungle;
+import com.vungle.warren.AdConfig;              // Custom ad configurations
+import com.vungle.warren.InitCallback;          // Initialization callback
+import com.vungle.warren.LoadAdCallback;        // Load ad callback
+import com.vungle.warren.PlayAdCallback;        // Play ad callback
+import com.vungle.warren.VungleNativeAd;        // Flex-Feed ad
+import com.vungle.warren.Vungle.Consent;        // GDPR consent
+import com.vungle.warren.error.VungleException; // onError message
 
 import com.godot.game.BuildConfig;
 import com.godot.game.R;
@@ -46,15 +50,15 @@ import org.godotengine.godot.Dictionary;
 
 public class GDVungle extends Godot.SingletonBase {
 
-	static public Godot.SingletonBase initialize (Activity p_activity) {
-		return new GDVungle(p_activity);
-	}
+    static public Godot.SingletonBase initialize (Activity p_activity) {
+        return new GDVungle(p_activity);
+    }
 
 	public GDVungle(Activity p_activity) {
 		activity = p_activity;
 
 		registerClass ("GDVungle", new String[] {
-			"init", "show"
+			"init", "show", "load"
 		});
 	}
 
@@ -65,64 +69,80 @@ public class GDVungle extends Godot.SingletonBase {
 				_init();
 
 				Utils.setScriptInstance(p_script_id);
-				Utils.d("Vungle::Initialized");
 			}
 		});
 	}
 
 	private void _init() {
 		final String app_id = _config.optString("app_id");
-		vunglePub.init(activity, app_id);
 
-		final AdConfig globalAdConfig = vunglePub.getGlobalAdConfig();
-		globalAdConfig.setSoundEnabled(true);
-		globalAdConfig.setOrientation(Orientation.autoRotate);
+        Vungle.init(app_id, activity, new InitCallback() {
+            @Override
+            public void onSuccess() {
+                Utils.d("Vungle::Initialized");
+            }
 
-		vunglePub.setEventListeners(listener);
+            @Override
+            public void onError(Throwable throwable) {
+                // throwable.getLocalizedMessage() contains error message
+				Utils.d("Vungle::Initialization:Error");
+            }
+
+            @Override
+            public void onAutoCacheAdAvailable(String placementId) {
+                // Callback to notify when an ad becomes available for the auto-cached placement
+                // NOTE: This callback works only for the auto-cached placement. Otherwise, please use
+                // LoadAdCallback with loadAd API for loading placements.
+            }
+        });
+
+		globalAdConfig = new AdConfig();
+		globalAdConfig.setMuted(true);
+        globalAdConfig.setAutoRotate(true);
 	}
 
-	//TODO: expose AdPlay configuration to script
+    public void load(final String placement) {
+    	activity.runOnUiThread(new Runnable() {
+		    public void run() {
+                if (Vungle.isInitialized()) {
+                    if (placement.equals("")) {
+                        Vungle.loadAd("PLACEMENT_ID", loadListener);
+                    } else {
+                        Vungle.loadAd(placement, loadListener);
+                    }
+                } else {
+                    Utils.d("Vungle:NotInitialized");
+                }
+            }
+        });
+    }
 
-	public void show() {
+	//TODO: expose AdPlay configuration to script
+	public void show(final String placement) {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
-				if (vunglePub.isAdPlayable()) {
+				if (Vungle.canPlayAd(placement)) {
 					Utils.d("Vungle::Show::Ad");
-					vunglePub.playAd();
-
-					/**
-					// create a new AdConfig object
-					final AdConfig overrideConfig = new AdConfig();
-
-					// set any configuration options you like.
-					// For a full description of available options, see the
-					// 'Configuration Options' section.
-
-					overrideConfig.setIncentivized(true);
-					overrideConfig.setSoundEnabled(false);
-
-					// the overrideConfig object will only affect this ad play.
-					vunglePub.playAd(overrideConfig);
-					**/
+					Vungle.playAd(placement, globalAdConfig, playListener);
 				}
 			}
 		});
 	}
 
-	private EventListener listener = new EventListener() {
+	private PlayAdCallback playListener = new PlayAdCallback() {
 		@Override
-		public void onAdStart() {
+        public void onAdStart(String placementReferenceId) {
 			Utils.d("Vungle::Ad::Start");
 		}
 
 		@Override
-		public void onAdEnd(boolean wasSuccessfulView, boolean wasCallToActionClicked) {
-			if (wasSuccessfulView) {
+		public void onAdEnd(String pReferenceId, boolean completed, boolean isCTAClicked) {
+			if (completed) {
 				Utils.d("Vungle::ShouldReward");
-				Utils.callScriptFunc("Vungle", "ShowReward", true);
+				Utils.callScriptFunc("Vungle", "Reward", true);
 			}
 
-			if (wasCallToActionClicked) {
+			if (isCTAClicked) {
 				Utils.d("Vungle::CallToAction::Clicked");
 				Utils.callScriptFunc("Vungle", "CallToAction", true);
 			}
@@ -130,37 +150,39 @@ public class GDVungle extends Godot.SingletonBase {
 			Utils.d("Vungle::Ad::End");
 		}
 
-		@Override
-		public void onAdPlayableChanged(boolean isAdPlayable) {
-			Utils.d("Vungle::Ad::Playable::Changed");
-
-			if (isAdPlayable) {
-				Utils.d("Vungle::Ad::Playable");
-				Utils.callScriptFunc("Vungle", "AdAvailable", true);
-			} else { Utils.d("Vungle::Ad::NotPlayable"); }
-		}
-
-		@Override
-		public void onAdUnavailable(String reason) {
-			Utils.d("Vungle::AdUnavailable::" + reason);
-			Utils.callScriptFunc("Vungle", "AdAvailable", false);
-		}
+        @Override
+        public void onError(String placementReferenceId, Throwable throwable) {
+            // Placement reference ID for the placement that failed to play an ad
+            // Throwable contains error message
+        }
 	};
 
+    // Implement LoadAdCallback
+    private LoadAdCallback loadListener = new LoadAdCallback() {
+        @Override
+        public void onAdLoad(String placementReferenceId) {
+            // Placement reference ID for the placement to load ad assets
+            Utils.callScriptFunc("Vungle", "AdLoaded", true);
+        }
+
+        @Override
+        public void onError(String placementReferenceId, Throwable throwable) {
+            // Placement reference ID for the placement that failed to download ad assets
+            // Throwable contains error message
+            Utils.callScriptFunc("Vungle", "AdLoaded", false);
+        }
+    };
+
 	protected void onMainPause () {
-		vunglePub.onPause();
 	}
 
 	protected void onMainResume () {
-		vunglePub.onResume();
 	}
 
 	protected void onMainDestroy() {
-		vunglePub.clearEventListeners();
 	}
 
 	private static Activity activity;
 	private static JSONObject _config;
-
-	final VunglePub vunglePub = VunglePub.getInstance();
+    private static AdConfig globalAdConfig;
 }

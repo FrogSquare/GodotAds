@@ -91,7 +91,7 @@ public class GDUnityAds extends Godot.SingletonBase {
 		@Override
 		public void onUnityAdsReady(final String zoneId) {
 			Utils.d("UnityAds::onUnityAdsReady: " + zoneId);
-			Utils.callScriptFunc("UnityAds", "AdLoad", "Success");
+			Utils.callScriptFunc("UnityAds", "AdLoad", "success");
 		}
 
 		@Override
@@ -104,9 +104,9 @@ public class GDUnityAds extends Godot.SingletonBase {
 			Utils.d("UnityAds::onUnityAdsFinish: " + zoneId + " - " + result);
 
 			if (result.toString().equals("COMPLETED")) {
-				Utils.callScriptFunc("UnityAds", "ShouldReward", true);
+				Utils.callScriptFunc("UnityAds", "Reward", true);
 			} else {
-				Utils.callScriptFunc("UnityAds", "ShouldReward", false);
+				Utils.callScriptFunc("UnityAds", "Reward", false);
 			}
 		}
 

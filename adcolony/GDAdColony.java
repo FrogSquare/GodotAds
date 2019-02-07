@@ -111,12 +111,12 @@ public class GDAdColony extends Godot.SingletonBase {
 		public void onRequestFilled(AdColonyInterstitial p_ad) {
 			Utils.d("AdColony::RequestFilled::" + p_ad.getZoneID());
 			_ad_caller.put(p_ad.getZoneID(), p_ad);
-			Utils.callScriptFunc("AdColony", "AdFilled", true);
+			Utils.callScriptFunc("AdColony", "AdFill", "success");
 		}
 	
 		@Override
 		public void onRequestNotFilled(AdColonyZone zone) {
-			Utils.callScriptFunc("AdColony", "AdFillFailed", true);
+			Utils.callScriptFunc("AdColony", "AdFill", "failed");
 		}
 
 		@Override

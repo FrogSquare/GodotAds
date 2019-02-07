@@ -18,7 +18,7 @@ build = {
 "admob"         : True,
 "adcolony"      : True,
 "chartboost"    : True,
-"vungle"        : False,
+"vungle"        : True,
 "mopub"         : True,
 "unity_ads"     : True,
 "awesome_ads"   : False,
@@ -75,12 +75,15 @@ def configure(env):
             env.android_add_dependency("implementation fileTree(dir: '"+libpath+"', include: ['*.jar'])")
 
         if (build["vungle"]):
+            env.android_add_to_attributes("vungle/AndroidAttributes.xml")
+
+            env.android_add_maven_repository('url "https://jitpack.io"')
             env.android_add_java_dir("vungle");
             env.android_add_to_manifest("vungle/AndroidManifestChunk.xml")
 
-            env.android_add_dependency("implementation 'com.google.android.gms:play-services-location:11.6.0'")
-            env.android_add_dependency("implementation fileTree(dir: '"+libpath+"', include: ['*.jar'])")
-
+            env.android_add_dependency("implementation 'com.github.vungle:vungle-android-sdk:6.3.24'")
+            env.android_add_dependency("implementation 'com.google.android.gms:play-services-basement:16.0.0'")
+            env.android_add_dependency("implementation 'com.google.android.gms:play-services-location:16.0.0'")
         if (build["mopub"]):
             env.android_add_default_config("minSdkVersion 16")
 
@@ -90,6 +93,7 @@ def configure(env):
 
             env.android_add_maven_repository('url "https://s3.amazonaws.com/moat-sdk-builds"')
             env.android_add_dependency("implementation('com.mopub:mopub-sdk:5.4.1@aar') { transitive = true }")
+            env.android_add_dependency("implementation('com.mopub.volley:mopub-volley:2.0.0@aar') { transitive = true }")
 
         if (build["unity_ads"]):
             env.android_add_java_dir("unity_ads");
