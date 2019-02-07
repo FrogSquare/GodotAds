@@ -33,6 +33,18 @@ Chartboost: [Chartboost SDk](http://www.chartboo.st/sdk/android)
 Vungle: [Vungle SDK](https://dashboard.vungle.com/dashboard/api/1/sdk/android?v=4)
 UnityAds: [Unity-ads SDK](https://github.com/Unity-Technologies/unity-ads-android/releases/download/2.1.1/unity-ads.aar)
 
+#Before anyting youy should call (on 2.X)
+```
+var gdads = Globals.get_singleton("GodotAds")
+gdads.init(get_instance_ID())
+```
+# On 3.X (latest from git)
+```
+var gdads = Engine.get_singleton("GodotAds")
+gdads.init(get_instance_ID())
+```
+this prepares the adlayout for Banner ads to load into.
+
 Initialize AdMob
 ```
 var AdMob = Globals.get_singleton("AdMob")
@@ -65,6 +77,7 @@ AdColony.init(_dict, get_instance_ID())
 Initialize Chartboost
 ```
 var Chartboost = Globals.get_singleton("GDChartboost")
+
 var _dict = Dictionary()
 _dict["app_id"] = "Your chartboost app id" 
 _dict["app_signature"] = "your chartboost signature"
@@ -109,9 +122,10 @@ Unityads.init(_dict, get_instance_ID())
 # Callbacks
 adding the callback funtion so we can recive event log/states from the module
 ```
-func _receive_message (from, key, value) {
-	# Receive message
-}
+func _receive_message (tag, from, key, value):
+	if tag == "GodotAds" and from == "AdMob":
+        if key == "AdMob_Banner" and value == "loaded":
+            # Show banner here.
 ```
 
 # API

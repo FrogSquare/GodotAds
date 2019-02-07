@@ -35,6 +35,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.List;
 
+//import com.mopub.common.logging.MoPubLog.LogLevel;
+import com.mopub.common.*;
 import com.mopub.mobileads.*;
 import com.mopub.mobileads.MoPubView.BannerAdListener;
 import com.mopub.mobileads.MoPubInterstitial.InterstitialAdListener;
@@ -44,6 +46,7 @@ import com.godot.game.R;
 
 import org.godotengine.godot.Godot;
 import org.godotengine.godot.Utils;
+import org.godotengine.godot.GodotAds;
 
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -71,12 +74,29 @@ public class GDMopub extends Godot.SingletonBase {
 				_init();
 
 				Utils.setScriptInstance(p_script_id);
-				Utils.d("Mopub::Initialized");
 			}
 		});
 	}
 
+    private SdkInitializationListener initSdkListener() {
+        return new SdkInitializationListener() {
+            @Override
+            public void onInitializationFinished() {
+                /* MoPub SDK initialized. 
+                Check if you should show the consent dialog here, and make your ad requests. */
+				Utils.d("Mopub::Initialized");
+            }
+        };
+    }
+
 	private void _init() {
+        // configurations required to initialize
+        SdkConfiguration sdkConfiguration =
+            new SdkConfiguration.Builder(_config.optString("UnitID", "AD_UNIT_ID"))
+            .build();
+
+        MoPub.initializeSdk(activity, sdkConfiguration, initSdkListener());
+
 		if (_config.optBoolean("BannerAd", false)) {
 			createBanner();
 		}
@@ -91,7 +111,7 @@ public class GDMopub extends Godot.SingletonBase {
 	}
 
 	private void createBanner() {
-		RelativeLayout layout = ((Godot)activity).adLayout; // Getting Godots framelayout
+		RelativeLayout layout = GodotAds.adLayout; // Getting Godots framelayout
 		FrameLayout.LayoutParams AdParams = new FrameLayout.LayoutParams(
 						 FrameLayout.LayoutParams.MATCH_PARENT,
 						 FrameLayout.LayoutParams.WRAP_CONTENT);

@@ -17,10 +17,10 @@
 build = {
 "admob"         : True,
 "adcolony"      : True,
-"chartboost"    : False,
+"chartboost"    : True,
 "vungle"        : False,
-"mopub"         : False,
-"unity_ads"     : False,
+"mopub"         : True,
+"unity_ads"     : True,
 "awesome_ads"   : False,
 "appodeal"      : False,
 "inmobi"        : False,
@@ -54,7 +54,7 @@ def configure(env):
         env.android_add_java_dir("android");
         env.android_add_res_dir("res");
 
-        env.android_add_dependency("compile ('com.google.android.gms:play-services-ads:15.0.1') {\
+        env.android_add_dependency("implementation ('com.google.android.gms:play-services-ads:15.0.1') {\
                 exclude group: 'com.android.support'\
                 exclude module: 'support-v4'}")
 
@@ -65,21 +65,21 @@ def configure(env):
             env.android_add_to_manifest("adcolony/AndroidManifestChunk.xml")
 
             env.android_add_maven_repository('url "https://adcolony.bintray.com/AdColony"')
-            env.android_add_dependency("compile 'com.android.support:support-annotations:25.0.1'")
-            env.android_add_dependency("compile 'com.adcolony:sdk:3.3.7'")
+            env.android_add_dependency("implementation 'com.android.support:support-annotations:25.0.1'")
+            env.android_add_dependency("implementation 'com.adcolony:sdk:3.3.7'")
 
         if (build["chartboost"]):
             env.android_add_java_dir("chartboost");
             env.android_add_to_manifest("chartboost/AndroidManifestChunk.xml")
 
-            env.android_add_dependency("compile fileTree(dir: '"+libpath+"', include: ['*.jar'])")
+            env.android_add_dependency("implementation fileTree(dir: '"+libpath+"', include: ['*.jar'])")
 
         if (build["vungle"]):
             env.android_add_java_dir("vungle");
             env.android_add_to_manifest("vungle/AndroidManifestChunk.xml")
 
-            env.android_add_dependency("compile 'com.google.android.gms:play-services-location:11.6.0'")
-            env.android_add_dependency("compile fileTree(dir: '"+libpath+"', include: ['*.jar'])")
+            env.android_add_dependency("implementation 'com.google.android.gms:play-services-location:11.6.0'")
+            env.android_add_dependency("implementation fileTree(dir: '"+libpath+"', include: ['*.jar'])")
 
         if (build["mopub"]):
             env.android_add_default_config("minSdkVersion 16")
@@ -89,13 +89,13 @@ def configure(env):
             env.android_add_to_manifest("mopub/AndroidManifestChunk.xml")
 
             env.android_add_maven_repository('url "https://s3.amazonaws.com/moat-sdk-builds"')
-            env.android_add_dependency("compile('com.mopub:mopub-sdk:4.16.0@aar') { transitive = true }")
+            env.android_add_dependency("implementation('com.mopub:mopub-sdk:5.4.1@aar') { transitive = true }")
 
         if (build["unity_ads"]):
             env.android_add_java_dir("unity_ads");
             env.android_add_flat_dir(libpath)
             env.android_add_flat_dir(respath)
-            env.android_add_dependency("compile(name:'unity-ads', ext:'aar')")
+            env.android_add_dependency("implementation(name:'unity-ads', ext:'aar')")
 
         if (build["awesome_ads"]): pass
         if (build["appodeal"]): pass

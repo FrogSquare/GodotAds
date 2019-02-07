@@ -16,6 +16,11 @@
 
 package org.godotengine.godot;
 
+import org.godotengine.godot.Godot;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
+
 import android.app.Activity;
 
 public class GodotAds extends Godot.SingletonBase {
@@ -25,12 +30,22 @@ public class GodotAds extends Godot.SingletonBase {
 	}
 
 	public GodotAds(Activity p_activity) {
+        activity = p_activity;
+
 		registerClass ("GodotAds", new String[] {
 		"init"
 		});
 	}
 
 	public void init (int p_script_id) {
+        adLayout = new RelativeLayout(activity);
+        adLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+        ((Godot)activity).layout.addView(adLayout);
+
+
 		Utils.setScriptInstance(p_script_id);
 	}
+
+    public static RelativeLayout adLayout;
+    public static Activity activity;
 }
