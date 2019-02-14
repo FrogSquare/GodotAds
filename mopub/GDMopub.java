@@ -126,7 +126,7 @@ public class GDMopub extends Godot.SingletonBase {
 		} else { AdParams.gravity = Gravity.TOP; }
 
 		final String banner_unit_id =
-		_config.optString("BannerAdId", activity.getString(R.string.mopub_banner_test_id));
+		_config.optString("BannerAdId", activity.getString(R.string.gads_mopub_banner_test_id));
 
 		moPubView = new MoPubView(activity);
 		moPubView.setLayoutParams(AdParams);
@@ -141,7 +141,7 @@ public class GDMopub extends Godot.SingletonBase {
 
 	private void createInterstitial() {
 		final String interstitial_unit_id =
-		_config.optString("InterstitialAdId", activity.getString(R.string.mopub_interstitial_test_id));
+		_config.optString("InterstitialAdId", activity.getString(R.string.gads_mopub_interstitial_test_id));
 
 		mInterstitial = new MoPubInterstitial(activity, interstitial_unit_id);
 		mInterstitial.setInterstitialAdListener(interstitial_listener);

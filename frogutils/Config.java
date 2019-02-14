@@ -18,6 +18,7 @@ package org.godotengine.godot;
 
 public class Config {
 
-	static final String TAG = "GodotAds";
-	static final boolean DEBUG = true;
+	static final String TAG = "FrogSquare";
+
+	static boolean DEBUG = true;
 }

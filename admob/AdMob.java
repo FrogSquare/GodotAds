@@ -124,7 +124,7 @@ public class AdMob extends Godot.SingletonBase {
 
 		if (ad_unit_id.length() <= 0) {
 			Utils.d("AdMob:Banner:UnitId:NotProvided");
-			ad_unit_id = activity.getString(R.string.banner_ad_unit_id);
+			ad_unit_id = activity.getString(R.string.gads_banner_ad_unit_id);
 		}
 
 		mAdView = new AdView(activity);
@@ -162,7 +162,7 @@ public class AdMob extends Godot.SingletonBase {
 
 		if (ad_unit_id.length() <= 0) {
 			Utils.d("AdMob:Interstitial:UnitId:NotProvided");
-			ad_unit_id = activity.getString(R.string.interstitial_ad_unit_id);
+			ad_unit_id = activity.getString(R.string.gads_interstitial_ad_unit_id);
 		}
 
 		mInterstitialAd = new InterstitialAd(activity);
@@ -279,7 +279,7 @@ public class AdMob extends Godot.SingletonBase {
 
 		if (ad_unit_id.length() <= 0) {
 			Utils.d("AdMob:RewardedVideo:UnitId:NotProvided");
-			ad_unit_id = activity.getString(R.string.rewarded_video_ad_unit_id);
+			ad_unit_id = activity.getString(R.string.gads_rewarded_video_ad_unit_id);
 		}
 
 		mrv.loadAd(ad_unit_id, adRB.build());

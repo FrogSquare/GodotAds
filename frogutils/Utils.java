@@ -18,6 +18,9 @@ package org.godotengine.godot;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
@@ -31,6 +34,7 @@ import org.json.JSONException;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.IOException;
 import java.io.BufferedReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -38,7 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
 
-//import org.godotengine.godot.Utils;
+import org.godotengine.godot.Utils;
 
 public class Utils {
 
@@ -48,6 +52,24 @@ public class Utils {
 	public static final int FIREBASE_FACEBOOK_SIGN_IN	= 8005;
 	public static final int FIREBASE_TWITTER_SIGN_IN	= 8006;
 	// public static final int FIREBASE_ = ;
+
+    public static boolean get_db_bool(final String p_key) {
+        String val = get_db_value(p_key);
+
+        if (val.equals("0") || val.equals("false")) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static String get_db_value(final String p_key) {
+        return KeyValueStorage.getValue(p_key);
+    }
+
+    public static void set_db_value(final String p_key, final String p_value) {
+        KeyValueStorage.setValue(p_key, p_value);
+    }
 
 	public static void d(final String message) {
 		if (Config.DEBUG) {
@@ -96,7 +118,26 @@ public class Utils {
 		return retMap;
 	}
 
+	public static Bitmap getBitmapFromAsset(Context context, String filePath) {
+		if (filePath.startsWith("res://")) { filePath = filePath.replaceFirst("res://", ""); }
+
+		AssetManager assetManager = context.getAssets();
+
+		InputStream istr;
+		Bitmap bitmap = null;
+
+		try {
+			istr = assetManager.open(filePath);
+			bitmap = BitmapFactory.decodeStream(istr);
+		} catch (IOException e) {
+			// handle exception
+		}
+
+		return bitmap;
+	}
+
 	public static String readFromFile(String fPath, Context context) {
+        d("Reading File: " + fPath);
 		StringBuilder returnString = new StringBuilder();
 
 		String fileName = fPath;
@@ -120,7 +161,9 @@ public class Utils {
 			}
 
 		}
-		catch (Exception e) { e.getMessage(); }
+		catch (Exception e) {
+            d("FileRead Failed: " + e.getMessage());
+        }
 		finally {
 			try {
 				if (isr != null) { isr.close(); }
@@ -207,6 +250,22 @@ public class Utils {
 
 	public static void setScriptInstance(int instanceID) {
 		script_instanceID = instanceID;
+	}
+
+	public static void callScriptCallback(
+            int script_id, String function, String from, Object key, Object value) {
+
+		GodotLib.calldeferred(script_id, function, new Object[] { Config.TAG, from, key, value });
+	}
+
+	public static void callScriptCallback(String function, String from, Object key, Object value) {
+		if (script_instanceID == -1) {
+			Utils.d("Script::Instance::NotSset");
+			return;
+		}
+
+		GodotLib.calldeferred(script_instanceID, function,
+		new Object[] { Config.TAG, from, key, value });
 	}
 
 	public static void callScriptFunc(int script_id, String from, Object key, Object value) {

@@ -28,13 +28,22 @@ build = {
 
 import os
 
-def can_build(env_plat, plat = None):
-    if plat == None:
-        return (env_plat == "android")
-    else:
-        return (plat == "android")
+from colors import *
 
+def can_build(env, plat = None):
     #return False
+    if plat == None:
+        print("`GodotAds`"+RED+" master "+RESET+" branch not compatable with godot 2.X")
+        print("Try using `GodotAds` "+GREEN+" 2.X "+RESET+" branch for Godot 2.X")
+        return False
+
+    if plat == "android":
+        print("GodotAds: " + GREEN + "Enabled" + RESET)
+        return True
+    else:
+        print("GodotAds: " + RED + "Disabled" + RESET)
+        return False
+    pass   
 
 def configure(env):
     cur_dir = os.path.dirname(os.path.abspath(__file__)).replace(os.path.sep, '/')
@@ -52,11 +61,11 @@ def configure(env):
         #env.android_add_gradle_classpath("com.google.gms:google-services:3.1.1")
         #env.android_add_gradle_plugin("com.google.gms.google-services")
 
-        if "FireBase" in env.module_list: pass
-        else: env.android_add_java_dir("utils");
-
         env.android_add_java_dir("android");
         env.android_add_res_dir("res");
+
+        if "frogutils" in [os.path.split(path)[1] for path in env.android_java_dirs]: pass
+        else: env.android_add_java_dir("frogutils");
 
         env.android_add_dependency("implementation ('com.google.android.gms:play-services-ads:16.0.0') {\
                 exclude group: 'com.android.support'\
