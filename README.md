@@ -19,12 +19,12 @@ git clone https://github.com/FrogSquare/GodotSql GodotSql
 
 ```
 build = {
-"admob"         : True,
-"adcolony"      : True,
-"chartboost"    : True,
-"vungle"        : True,
-"mopub"         : True,
-"unity_ads"     : True,
+"admob"         : True, # add org/godotengine/godot/AdMob to the engine.cfg
+"adcolony"      : True, # add org/godotengine/godot/GDAdColony to the engine.cfg
+"chartboost"    : True, # add org/godotengine/godot/GDChartboost to the engine.cfg
+"vungle"        : True, # add org/godotengine/godot/GDVungle to the engine.cfg
+"mopub"         : True, # add org/godotengine/godot/GDMopub to the engine.cfg
+"unity_ads"     : True, # add org/godotengine/godot/GDUnityAds to the engine.cfg
 }
 ```
 
@@ -36,6 +36,15 @@ Download the sdk to `${GODOT_ROOT}/modules/GodotAds/libs/`
 Chartboost: [Chartboost SDk](http://www.chartboo.st/sdk/android)
 Vungle: [Vungle SDK](https://dashboard.vungle.com/dashboard/api/1/sdk/android?v=4)
 UnityAds: [Unity-ads SDK](https://github.com/Unity-Technologies/unity-ads-android/releases/download/2.1.1/unity-ads.aar)
+
+# Initialize FireBase
+
+Edit engine.cfg and add
+
+```
+[android]
+modules="org/godotengine/godot/GodotAds,org/godotengine/godot/AdMob,org/godotengine/godot/GDAdColony,org/godotengine/godot/GDChartboost,org/godotengine/godot/GDVungle,org/godotengine/godot/GDMopub,org/godotengine/godot/GDUnityAds"
+```
 
 #On (on 2.X)
 ```
