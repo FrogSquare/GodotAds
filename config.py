@@ -16,11 +16,11 @@
 
 build = {
 "admob"         : True,
-"adcolony"      : True,
-"chartboost"    : True,
-"vungle"        : True,
-"mopub"         : True,
-"unity_ads"     : True,
+"adcolony"      : False,
+"chartboost"    : False,
+"vungle"        : False,
+"mopub"         : False,
+"unity_ads"     : False,
 "awesome_ads"   : False,
 "appodeal"      : False,
 "inmobi"        : False,
@@ -30,12 +30,17 @@ import os
 
 from colors import *
 
-def can_build(env, plat = None):
+def can_build(env_plat, plat = None):
     #return False
     if plat == None:
-        print("`GodotAds`"+RED+" master "+RESET+" branch not compatable with godot 2.X")
-        print("Try using `GodotAds` "+GREEN+" 2.X "+RESET+" branch for Godot 2.X")
-        return False
+        #print("`GodotAds`"+RED+" master "+RESET+" branch not compatable with godot 2.X")
+        #print("Try using `GodotAds` "+GREEN+" 2.X "+RESET+" branch for Godot 2.X")
+
+        if isinstance(env_plat, basestring):
+            plat = env_plat
+        else:
+            print("GodotAds: "+RED+" Platform not set, Disabling GodotAds "+RESET)
+            return False
 
     if plat == "android":
         print("GodotAds: " + GREEN + "Enabled" + RESET)

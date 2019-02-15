@@ -33,7 +33,7 @@ public class GodotAds extends Godot.SingletonBase {
         activity = p_activity;
 
 		registerClass ("GodotAds", new String[] {
-		"init"
+		"init", "set_debug"
 		});
 	}
 
@@ -45,6 +45,10 @@ public class GodotAds extends Godot.SingletonBase {
 
 		Utils.setScriptInstance(p_script_id);
 	}
+
+    public void set_debug(final boolean p_value) {
+        Utils.set_debug("GodotAds", p_value);
+    }
 
     public static RelativeLayout adLayout;
     public static Activity activity;

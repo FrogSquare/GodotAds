@@ -84,7 +84,7 @@ public class GDMopub extends Godot.SingletonBase {
             public void onInitializationFinished() {
                 /* MoPub SDK initialized. 
                 Check if you should show the consent dialog here, and make your ad requests. */
-				Utils.d("Mopub::Initialized");
+				Utils.d("GodotAds", "Mopub::Initialized");
             }
         };
     }
@@ -160,13 +160,13 @@ public class GDMopub extends Godot.SingletonBase {
 				if (show) {
 					if (!moPubView.isEnabled()) { moPubView.setEnabled(true); }
 					if (moPubView.getVisibility() == View.INVISIBLE) {
-						Utils.d("MoPub:Visiblity:On");
+						Utils.d("GodotAds", "MoPub:Visiblity:On");
 						moPubView.setVisibility(View.VISIBLE);
 				}
 				} else {
 					if (moPubView.isEnabled()) { moPubView.setEnabled(false); }
 					if (moPubView.getVisibility() != View.INVISIBLE) {
-						Utils.d("MoPub:Visiblity:Off");
+						Utils.d("GodotAds", "MoPub:Visiblity:Off");
 						moPubView.setVisibility(View.INVISIBLE);
 					}
 				}
@@ -178,12 +178,12 @@ public class GDMopub extends Godot.SingletonBase {
 		if (mInterstitial == null) { return; }
 
 		if (mInterstitial.isReady()) {
-			Utils.d("Mopub::Interstitial::Showing");
+			Utils.d("GodotAds", "Mopub::Interstitial::Showing");
 			mInterstitial.show();
 		} else {
 			// Caching is likely already in progress if `isReady()` is false.
 			// Avoid calling `load()` here and instead rely on the callbacks as suggested below.
-			Utils.d("Mopub::Interstitial::NotReady");
+			Utils.d("GodotAds", "Mopub::Interstitial::NotReady");
 		}
 	}
 
@@ -193,13 +193,13 @@ public class GDMopub extends Godot.SingletonBase {
 		@Override
 		public void onBannerLoaded(MoPubView banner) {
 			// The Banner has been cached and is ready to be shown.
-			Utils.d("Mopub::Banner::Load::Success");
+			Utils.d("GodotAds", "Mopub::Banner::Load::Success");
 			Utils.callScriptFunc("Mopub", "BannerLoad", "success");
 		}
 
 		@Override
 		public void onBannerFailed(MoPubView banner, MoPubErrorCode errorCode) {
-			Utils.d("Mopub::Banner::Load::Failed:: " + errorCode.toString());
+			Utils.d("GodotAds", "Mopub::Banner::Load::Failed:: " + errorCode.toString());
 			Utils.callScriptFunc("Mopub", "BannerLoad", "falied");
 		}
 
@@ -223,7 +223,7 @@ public class GDMopub extends Godot.SingletonBase {
 		@Override
 		public void onInterstitialLoaded(MoPubInterstitial interstitial) {
 			// The interstitial has been cached and is ready to be shown.
-			Utils.d("Mopub::Interstitial::Load::Success");
+			Utils.d("GodotAds", "Mopub::Interstitial::Load::Success");
 			Utils.callScriptFunc("Mopub", "InterstitialLoad", "success");
 		}
 
@@ -231,7 +231,7 @@ public class GDMopub extends Godot.SingletonBase {
 		public void onInterstitialFailed(MoPubInterstitial interstitial, MoPubErrorCode errorCode) {
 			// The interstitial has failed to load. Inspect errorCode for additional information.
 			// This is an excellent place to load more ads.
-			Utils.d("Mopub::Interstitial::Load::Failed:: " + errorCode.toString());
+			Utils.d("GodotAds", "Mopub::Interstitial::Load::Failed:: " + errorCode.toString());
 			Utils.callScriptFunc("Mopub", "InterstitialLoad", "failed");
 		}
 

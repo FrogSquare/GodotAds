@@ -79,13 +79,13 @@ public class GDVungle extends Godot.SingletonBase {
         Vungle.init(app_id, activity, new InitCallback() {
             @Override
             public void onSuccess() {
-                Utils.d("Vungle::Initialized");
+                Utils.d("GodotAds", "Vungle::Initialized");
             }
 
             @Override
             public void onError(Throwable throwable) {
                 // throwable.getLocalizedMessage() contains error message
-				Utils.d("Vungle::Initialization:Error");
+				Utils.d("GodotAds", "Vungle::Initialization:Error");
             }
 
             @Override
@@ -111,7 +111,7 @@ public class GDVungle extends Godot.SingletonBase {
                         Vungle.loadAd(placement, loadListener);
                     }
                 } else {
-                    Utils.d("Vungle:NotInitialized");
+                    Utils.d("GodotAds", "Vungle:NotInitialized");
                 }
             }
         });
@@ -122,7 +122,7 @@ public class GDVungle extends Godot.SingletonBase {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
 				if (Vungle.canPlayAd(placement)) {
-					Utils.d("Vungle::Show::Ad");
+					Utils.d("GodotAds", "Vungle::Show::Ad");
 					Vungle.playAd(placement, globalAdConfig, playListener);
 				}
 			}
@@ -132,22 +132,22 @@ public class GDVungle extends Godot.SingletonBase {
 	private PlayAdCallback playListener = new PlayAdCallback() {
 		@Override
         public void onAdStart(String placementReferenceId) {
-			Utils.d("Vungle::Ad::Start");
+			Utils.d("GodotAds", "Vungle::Ad::Start");
 		}
 
 		@Override
 		public void onAdEnd(String pReferenceId, boolean completed, boolean isCTAClicked) {
 			if (completed) {
-				Utils.d("Vungle::ShouldReward");
+				Utils.d("GodotAds", "Vungle::ShouldReward");
 				Utils.callScriptFunc("Vungle", "Reward", true);
 			}
 
 			if (isCTAClicked) {
-				Utils.d("Vungle::CallToAction::Clicked");
+				Utils.d("GodotAds", "Vungle::CallToAction::Clicked");
 				Utils.callScriptFunc("Vungle", "CallToAction", true);
 			}
 
-			Utils.d("Vungle::Ad::End");
+			Utils.d("GodotAds", "Vungle::Ad::End");
 		}
 
         @Override

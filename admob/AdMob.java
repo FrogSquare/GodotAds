@@ -71,7 +71,7 @@ public class AdMob extends Godot.SingletonBase {
 				_init();
 
 				Utils.setScriptInstance(p_script_id);
-				Utils.d("AdMob::Initialized");
+				Utils.d("GodotAds", "AdMob::Initialized");
 			}
 		});
 	}
@@ -123,7 +123,7 @@ public class AdMob extends Godot.SingletonBase {
 		String ad_unit_id = _config.optString("BannerAdId", "");
 
 		if (ad_unit_id.length() <= 0) {
-			Utils.d("AdMob:Banner:UnitId:NotProvided");
+			Utils.d("GodotAds", "AdMob:Banner:UnitId:NotProvided");
 			ad_unit_id = activity.getString(R.string.gads_banner_ad_unit_id);
 		}
 
@@ -135,7 +135,7 @@ public class AdMob extends Godot.SingletonBase {
 		mAdView.setAdListener(new AdListener() {
 			@Override
 			public void onAdLoaded() {
-				Utils.d("AdMob:Banner:OnAdLoaded");
+				Utils.d("GodotAds", "AdMob:Banner:OnAdLoaded");
                 AdSize adSize = mAdView.getAdSize();
 
                 mAdSize.put("width", adSize.getWidthInPixels(activity));
@@ -146,7 +146,7 @@ public class AdMob extends Godot.SingletonBase {
 
 			@Override
 			public void onAdFailedToLoad(int errorCode) {
-				Utils.w("AdMob:Banner:onAdFailedToLoad:" + errorCode);
+				Utils.w("GodotAds", "AdMob:Banner:onAdFailedToLoad:" + errorCode);
 				Utils.callScriptFunc("AdMob", "AdMob_Banner", "load_failed");
 			}
 		});
@@ -161,7 +161,7 @@ public class AdMob extends Godot.SingletonBase {
 		String ad_unit_id = _config.optString("InterstitialAdId", "");
 
 		if (ad_unit_id.length() <= 0) {
-			Utils.d("AdMob:Interstitial:UnitId:NotProvided");
+			Utils.d("GodotAds", "AdMob:Interstitial:UnitId:NotProvided");
 			ad_unit_id = activity.getString(R.string.gads_interstitial_ad_unit_id);
 		}
 
@@ -170,19 +170,19 @@ public class AdMob extends Godot.SingletonBase {
 		mInterstitialAd.setAdListener(new AdListener() {
 			@Override
 			public void onAdLoaded() {
-				Utils.d("AdMob:Interstitial:OnAdLoaded");
+				Utils.d("GodotAds", "AdMob:Interstitial:OnAdLoaded");
 				Utils.callScriptFunc("AdMob", "AdMob_Interstitial", "loaded");
 			}
 
 			@Override
 			public void onAdFailedToLoad(int errorCode) {
-				Utils.w("AdMob:Interstitial:onAdFailedToLoad:" + errorCode);
+				Utils.w("GodotAds", "AdMob:Interstitial:onAdFailedToLoad:" + errorCode);
 				Utils.callScriptFunc("AdMob", "AdMob_Interstitial", "load_failed");
 			}
 
 			@Override
 			public void onAdClosed() {
-				Utils.w("AdMob:Interstitial:onAdClosed");
+				Utils.w("GodotAds", "AdMob:Interstitial:onAdClosed");
 				requestNewInterstitial();
 			}
 
@@ -210,21 +210,21 @@ public class AdMob extends Godot.SingletonBase {
 
 			@Override
 			public void onRewardedVideoAdLoaded() {
-				Utils.d("AdMob:Video:Loaded");
+				Utils.d("GodotAds", "AdMob:Video:Loaded");
 				//emitRewardedVideoStatus();
 				//Utils.call
 			}
 
 			@Override
 			public void onRewarded(RewardItem rewardItem) {
-				Utils.d("AdMob:Rewarded");
+				Utils.d("GodotAds", "AdMob:Rewarded");
 
 				JSONObject ret = new JSONObject();
 				try {
 					ret.put("RewardType", rewardItem.getType());
 					ret.put("RewardAmount", rewardItem.getAmount());
 				} catch (JSONException e) {
-					Utils.d("AdMob:Reward:Error:" + e.toString());
+					Utils.d("GodotAds", "AdMob:Reward:Error:" + e.toString());
 				}
 
 				Utils.callScriptFunc("AdMob", "AdMobReward", ret.toString());
@@ -232,33 +232,33 @@ public class AdMob extends Godot.SingletonBase {
 
 			@Override
 			public void onRewardedVideoAdFailedToLoad(int errorCode) {
-				Utils.d("AdMob:VideoLoad:Failed");
+				Utils.d("GodotAds", "AdMob:VideoLoad:Failed");
 				Utils.callScriptFunc("AdMob", "AdMob_Video", "load_failed");
 			}
 
 			@Override
 			public void onRewardedVideoAdClosed() {
-				Utils.d("AdMob:VideoAd:Closed");
+				Utils.d("GodotAds", "AdMob:VideoAd:Closed");
 			}
 
 			@Override
 			public void onRewardedVideoAdLeftApplication() {
-				Utils.d("AdMob:VideoAd:LeftApp");
+				Utils.d("GodotAds", "AdMob:VideoAd:LeftApp");
 			}
 
 			@Override
 			public void onRewardedVideoAdOpened() {
-				Utils.d("AdMon:VideoAd:Opended");
+				Utils.d("GodotAds", "AdMon:VideoAd:Opended");
 			}
 
 			@Override
 			public void onRewardedVideoStarted() {
-				Utils.d("Reward:VideoAd:Started");
+				Utils.d("GodotAds", "Reward:VideoAd:Started");
 			}
 
 			@Override
 			public void onRewardedVideoCompleted() {
-				Utils.d("Reward:VideoAd:Completed");
+				Utils.d("GodotAds", "Reward:VideoAd:Completed");
 			}
 		});
 
@@ -278,7 +278,7 @@ public class AdMob extends Godot.SingletonBase {
 		String ad_unit_id = _config.optString("RewardedVideoAdId", "");
 
 		if (ad_unit_id.length() <= 0) {
-			Utils.d("AdMob:RewardedVideo:UnitId:NotProvided");
+			Utils.d("GodotAds", "AdMob:RewardedVideo:UnitId:NotProvided");
 			ad_unit_id = activity.getString(R.string.gads_rewarded_video_ad_unit_id);
 		}
 
@@ -293,13 +293,13 @@ public class AdMob extends Godot.SingletonBase {
 				if (show) {
 					if (mAdView.isEnabled()) { mAdView.setEnabled(true); }
 					if (mAdView.getVisibility() == View.INVISIBLE) {
-						Utils.d("AdMob:Visiblity:On");
+						Utils.d("GodotAds", "AdMob:Visiblity:On");
 						mAdView.setVisibility(View.VISIBLE);
 				}
 				} else {
 					if (mAdView.isEnabled()) { mAdView.setEnabled(false); }
 					if (mAdView.getVisibility() != View.INVISIBLE) {
-						Utils.d("AdMob:Visiblity:Off");
+						Utils.d("GodotAds", "AdMob:Visiblity:Off");
 						mAdView.setVisibility(View.INVISIBLE);
 					}
 				}
@@ -313,7 +313,7 @@ public class AdMob extends Godot.SingletonBase {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
 				if (mInterstitialAd.isLoaded()) { mInterstitialAd.show(); }
-				else { Utils.d("AdMob:Interstitial:NotLoaded"); }
+				else { Utils.d("GodotAds", "AdMob:Interstitial:NotLoaded"); }
 			}
 		});
 	}
@@ -324,14 +324,14 @@ public class AdMob extends Godot.SingletonBase {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
 				if (mrv.isLoaded()) { mrv.show(); }
-				else { Utils.d("AdMob:RewardedVideo:NotLoaded"); }
+				else { Utils.d("GodotAds", "AdMob:RewardedVideo:NotLoaded"); }
 			}
 		});
 	}
 
     public Dictionary get_banned_size() {
         if ((int)mAdSize.get("width") == 0 || (int)mAdSize.get("height") == 0) {
-            Utils.d("AdView::Not::Loaded::Yet");
+            Utils.d("GodotAds", "AdView::Not::Loaded::Yet");
         }
         
         return mAdSize;

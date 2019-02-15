@@ -63,7 +63,7 @@ public class GDUnityAds extends Godot.SingletonBase {
 				_init();
 
 				Utils.setScriptInstance(p_script_id);
-				Utils.d("UnityAds::Initialized");
+				Utils.d("GodotAds", "UnityAds::Initialized");
 			}
 		});
 	}
@@ -71,7 +71,7 @@ public class GDUnityAds extends Godot.SingletonBase {
 	private void _init() {
 		UnityAds.setListener(listener);
 
-		if (Config.DEBUG || BuildConfig.DEBUG) {
+		if (Utils.get_debug("GodotAds") || BuildConfig.DEBUG) {
 			UnityAds.setDebugMode(true);
 		}
 
@@ -83,25 +83,25 @@ public class GDUnityAds extends Godot.SingletonBase {
 		if (UnityAds.isReady(location)) {
 			UnityAds.show(activity, location);
 		} else {
-			Utils.d("UnityAds::AdNotReady:: " + location);
+			Utils.d("GodotAds", "UnityAds::AdNotReady:: " + location);
 		}
 	}
 
 	private IUnityAdsListener listener = new IUnityAdsListener() {
 		@Override
 		public void onUnityAdsReady(final String zoneId) {
-			Utils.d("UnityAds::onUnityAdsReady: " + zoneId);
+			Utils.d("GodotAds", "UnityAds::onUnityAdsReady: " + zoneId);
 			Utils.callScriptFunc("UnityAds", "AdLoad", "success");
 		}
 
 		@Override
 		public void onUnityAdsStart(String zoneId) {
-			Utils.d("UnityAds::onUnityAdsStart: " + zoneId);
+			Utils.d("GodotAds", "UnityAds::onUnityAdsStart: " + zoneId);
 		}
 
 		@Override
 		public void onUnityAdsFinish(String zoneId, UnityAds.FinishState result) {
-			Utils.d("UnityAds::onUnityAdsFinish: " + zoneId + " - " + result);
+			Utils.d("GodotAds", "UnityAds::onUnityAdsFinish: " + zoneId + " - " + result);
 
 			if (result.toString().equals("COMPLETED")) {
 				Utils.callScriptFunc("UnityAds", "Reward", true);
@@ -112,7 +112,7 @@ public class GDUnityAds extends Godot.SingletonBase {
 
 		@Override
 		public void onUnityAdsError(UnityAds.UnityAdsError error, String message) {
-			Utils.d("UnityAds::onUnityAdsError: " + error + " - " + message);
+			Utils.d("GodotAds", "UnityAds::onUnityAdsError: " + error + " - " + message);
 		}
 	};
 

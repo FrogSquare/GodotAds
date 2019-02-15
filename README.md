@@ -6,10 +6,14 @@ Godot all in one ads module for Android. (Customizable)
 [![LICENCE](https://img.shields.io/badge/License-Apache_V2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![PATREON](https://img.shields.io/badge/Patreon-support-yellow.svg)](https://www.patreon.com/bePatron?u=5130479)
 
+# Tip
+If you are using goodt 2.X copy `build.gradle.template` and `AndroidManifest.xml.template` from godot 3.1 (master branch) into `$(GODOT_2_ROOT)/platform/android/`,
+
 # Cloning
 ```
 cd ${GODOT_ROOT}/modules/
 git clone https://github.com/FrogSquare/GodotAds GodotAds
+git clone https://github.com/FrogSquare/GodotSql GodotSql
 ```
  and you must configure your module by editing `${GODOT_ROOT}/modules/GodotAds/config.py`
 
@@ -37,6 +41,7 @@ UnityAds: [Unity-ads SDK](https://github.com/Unity-Technologies/unity-ads-androi
 ```
 var gdads = Globals.get_singleton("GodotAds")
 gdads.init(get_instance_ID())
+gdads.set_debug(boolean) # set true for logs
 ```
 # On 3.X (latest from git)
 ```
@@ -170,10 +175,5 @@ Unityads.show("Location id")
 
 # Log adb
 ```
-adb -d logcat godot:V GoogleService:V GodotAds:V DEBUG:V AndroidRuntime:V ValidateServiceOp:V *:S
+adb -d logcat godot:V GoogleService:V FrogSquare:V DEBUG:V AndroidRuntime:V ValidateServiceOp:V *:S
 ```
-and if using our `GodotFireBase` module replace `GodotAds` with `FireBase`
-```
-adb -d logcat godot:V GoogleService:V FireBase:V DEBUG:V AndroidRuntime:V ValidateServiceOp:V *:S
-```
-

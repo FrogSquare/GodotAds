@@ -70,7 +70,7 @@ public class GDChartboost extends Godot.SingletonBase {
 				_init();
 
 				Utils.setScriptInstance(p_script_id);
-				Utils.d("Chartboost::Initialized");
+				Utils.d("GodotAds", "Chartboost::Initialized");
 			}
 		});
 	}
@@ -149,7 +149,7 @@ public class GDChartboost extends Godot.SingletonBase {
 
 		@Override
 		public void didFailToLoadInterstitial(String location, CBImpressionError error) {
-			//Utils.d("Chartboost::AdLoad::Failed:: " + error.toString());
+			//Utils.d("GodotAds", "Chartboost::AdLoad::Failed:: " + error.toString());
 			Utils.callScriptFunc("Chartboost", "adLoadFailed", location);
 		}
 
