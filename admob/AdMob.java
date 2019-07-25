@@ -60,7 +60,7 @@ public class AdMob extends Godot.SingletonBase {
 		activity = p_activity;
 
 		registerClass ("AdMob", new String[] {
-		"init", "show_banner_ad", "show_interstitial_ad", "show_rewarded_video", "get_banner_size"
+		"init", "show_banner_ad", "show_interstitial_ad", "show_rewarded_video", "get_banner_size", "is_rewarded_video_loaded"
 		});
 	}
 
@@ -213,6 +213,7 @@ public class AdMob extends Godot.SingletonBase {
 				Utils.d("GodotAds", "AdMob:Video:Loaded");
 				//emitRewardedVideoStatus();
 				//Utils.call
+				adRewardLoaded = true;
 			}
 
 			@Override
@@ -228,37 +229,46 @@ public class AdMob extends Godot.SingletonBase {
 				}
 
 				Utils.callScriptFunc("AdMob", "AdMobReward", ret.toString());
+				adRewardLoaded = false;
 			}
 
 			@Override
 			public void onRewardedVideoAdFailedToLoad(int errorCode) {
 				Utils.d("GodotAds", "AdMob:VideoLoad:Failed");
 				Utils.callScriptFunc("AdMob", "AdMob_Video", "load_failed");
+				adRewardLoaded = false;
 			}
 
 			@Override
 			public void onRewardedVideoAdClosed() {
 				Utils.d("GodotAds", "AdMob:VideoAd:Closed");
+				adRewardLoaded = false;
 			}
 
 			@Override
 			public void onRewardedVideoAdLeftApplication() {
 				Utils.d("GodotAds", "AdMob:VideoAd:LeftApp");
+				adRewardLoaded = false;
 			}
 
 			@Override
 			public void onRewardedVideoAdOpened() {
 				Utils.d("GodotAds", "AdMon:VideoAd:Opended");
+				adRewardLoaded = false;
 			}
 
 			@Override
 			public void onRewardedVideoStarted() {
 				Utils.d("GodotAds", "Reward:VideoAd:Started");
+				adRewardLoaded = false;
 			}
 
 			@Override
 			public void onRewardedVideoCompleted() {
 				Utils.d("GodotAds", "Reward:VideoAd:Completed");
+				adRewardLoaded = false;
+				
+				createRewardedVideo();
 			}
 		});
 
@@ -279,7 +289,7 @@ public class AdMob extends Godot.SingletonBase {
 
 		if (ad_unit_id.length() <= 0) {
 			Utils.d("GodotAds", "AdMob:RewardedVideo:UnitId:NotProvided");
-			ad_unit_id = activity.getString(R.string.gads_rewarded_video_ad_unit_id);
+			ad_unit_id = activity.getString(R.string.gads_rewarded_video_ad_unit_id);	
 		}
 
 		mrv.loadAd(ad_unit_id, adRB.build());
@@ -328,6 +338,10 @@ public class AdMob extends Godot.SingletonBase {
 			}
 		});
 	}
+	
+	public boolean is_rewarded_video_loaded() {
+		return adRewardLoaded;
+	}
 
     public Dictionary get_banned_size() {
         if ((int)mAdSize.get("width") == 0 || (int)mAdSize.get("height") == 0) {
@@ -363,5 +377,7 @@ public class AdMob extends Godot.SingletonBase {
     private Dictionary mAdSize = null;
 
 	private int _script_id = -1;
+	
+	private boolean adRewardLoaded = false;
 }
 

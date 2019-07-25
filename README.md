@@ -37,29 +37,32 @@ Chartboost: [Chartboost SDk](http://www.chartboo.st/sdk/android)
 Vungle: [Vungle SDK](https://dashboard.vungle.com/dashboard/api/1/sdk/android?v=4)
 UnityAds: [Unity-ads SDK](https://github.com/Unity-Technologies/unity-ads-android/releases/download/2.1.1/unity-ads.aar)
 
-# Initialize FireBase
-
-Edit engine.cfg and add
+# Edit engine.cfg and add
 
 ```
 [android]
 modules="org/godotengine/godot/GodotAds,org/godotengine/godot/AdMob,org/godotengine/godot/GDAdColony,org/godotengine/godot/GDChartboost,org/godotengine/godot/GDVungle,org/godotengine/godot/GDMopub,org/godotengine/godot/GDUnityAds"
 ```
 
-#On (on 2.X)
+# On (on 2.X)
+
 ```
 var gdads = Globals.get_singleton("GodotAds")
 gdads.init(get_instance_ID())
 gdads.set_debug(boolean) # set true for logs
 ```
+
 # On 3.X (latest from git)
+
 ```
 var gdads = Engine.get_singleton("GodotAds")
-gdads.init(get_instance_ID())
+gdads.init(get_instance_id())
 ```
+
 calling `init()` on `GodotAds` is optional.
 
 Initialize AdMob
+
 ```
 var AdMob = Globals.get_singleton("AdMob")
 
@@ -151,6 +154,7 @@ AdMob.show_banner_ad(false) # hide banner ad
 AdMob.show_interstitial_ad() # Show Interstitial Ad
 
 AdMob.show_rewarded_video() # Show Rewarded Ad
+AdMob.is_rewarded_video_loaded()
 ```
 
 **AdColony**
